@@ -15,6 +15,7 @@ import {
 import Product, { Navbar } from "./Product";
 import { TaskCard } from "./Styles/Task";
 import { UserCard } from "./UserCard";
+import { Saludar } from "./ClassComponentes/Saludar";
 
 const rootElement = document.getElementById("root");
 
@@ -26,6 +27,9 @@ root.render(
   // Fragment - Es un contenedor vacío. Nos ayuda a evitar utilizar etiquetas
   // que no queremos.
   <>
+    <Saludar />
+    <TaskCard ready={false} />
+    <TaskCard ready />
     <TaskCard />
 
     <Button text="Click me"></Button>
