@@ -6,6 +6,9 @@ import {
   GreetingWithInternalFunction,
   GreetingWithObject,
 } from "./Greeting";
+// Importación de componente con export default.
+import Product, { Navbar } from "./Product";
+import { UserCard } from "./UserCard";
 
 const rootElement = document.getElementById("root");
 
@@ -17,6 +20,8 @@ root.render(
   // Fragment - Es un contenedor vacío. Nos ayuda a evitar utilizar etiquetas
   // que no queremos.
   <>
+    <Navbar />
+    <UserCard />
     <GreetingWithInternalFunction />
     <GreetingWithObject />
     {/* Self closing tags */}
