@@ -1,6 +1,20 @@
-function Greeting() {
+function Greeting(props) {
+  console.log(props);
+
+  return <h1>{props.title}</h1>;
+}
+
+function GreetingDestructure({ title, name = "User" }) {
+  return (
+    <h1>
+      {title}, dice {name}
+    </h1>
+  );
+}
+function GreetingConditional(props) {
   const name = "Jake";
   const isMarried = true;
+  console.log(props);
 
   // JSX nos permite retornar HTML sin que sean strings. También podemos tener
   // JavaScript.
@@ -57,6 +71,7 @@ function GreetingTernaryOperator() {
 
 export {
   Greeting,
+  GreetingDestructure,
   GreetingWithInternalFunction,
   GreetingWithObject,
   GreetingTernaryOperator,
