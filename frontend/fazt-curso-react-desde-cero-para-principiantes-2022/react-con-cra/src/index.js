@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Button } from "./Button";
 import {
   Greeting,
   GreetingDestructure,
@@ -21,6 +22,8 @@ root.render(
   // Fragment - Es un contenedor vacío. Nos ayuda a evitar utilizar etiquetas
   // que no queremos.
   <>
+    <Button text="Click me"></Button>
+    <Button text="Hello, world" name="Joe"></Button>
     <UserCard
       name="Ryan Ryan"
       amount={3000}
