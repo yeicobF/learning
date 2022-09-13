@@ -1,3 +1,5 @@
+import { VscBug, VscGlobe } from "react-icons/vsc";
+
 export const Posts = () => {
   const handleClick = async () => {
     const res = await fetch("https://jsonplaceholder.typicode.com/posts");
@@ -15,5 +17,10 @@ export const Posts = () => {
     //   .then((data) => console.log(data))
     //   .catch((error) => console.log(error));
   };
-  return <button onClick={handleClick}>Traer datos</button>;
+  return (
+    <button onClick={handleClick}>
+      <VscGlobe />
+      Traer datos
+    </button>
+  );
 };
