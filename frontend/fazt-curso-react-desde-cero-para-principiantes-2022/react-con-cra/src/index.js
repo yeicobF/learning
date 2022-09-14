@@ -1,19 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 
-import { Posts } from "./FetchAPI/Posts";
-import { users } from "./Arrays/Arrays";
+import { Counter } from "./Hooks/useState/Counter";
+
+function Form() {
+  const [mensaje, setMensaje] = useState("");
+
+  return (
+    <div>
+      <input onChange={(e) => setMensaje(e.target.value)} />
+      <button onClick={() => alert(`El mensaje es: ${mensaje}`)}>Save</button>
+    </div>
+  );
+}
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
-    <Posts />
-    {users.map(({ id, name, image }, index) => {
-      return (
-        <div key={id}>
-          <h1>{name}</h1>
-          <img src={image} alt={name} />
-        </div>
-      );
-    })}
+    <Form />
+    <Counter />
   </>,
 );
