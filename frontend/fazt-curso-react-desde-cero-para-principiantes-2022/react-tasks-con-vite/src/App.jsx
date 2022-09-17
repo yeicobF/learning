@@ -20,6 +20,10 @@ function App() {
     ]);
   }
 
+  function deleteTask(id) {
+    setTasks(tasks.filter((task) => task.id !== id));
+  }
+
   useEffect(() => {
     setTasks(data);
   }, []);
@@ -27,7 +31,7 @@ function App() {
   return (
     <>
       <TaskForm createTask={createTask} />
-      <TaskList tasks={tasks} />
+      <TaskList tasks={tasks} deleteTask={deleteTask} />
     </>
   );
 }
