@@ -7,13 +7,15 @@ import TaskList from "./components/TaskList";
 function App() {
   const [tasks, setTasks] = useState([]);
 
-  function createTask(taskTitle) {
+  function createTask(task) {
+    const { title, description } = task;
+
     setTasks([
       ...tasks,
       {
-        title: taskTitle,
+        title,
+        description,
         id: tasks.length,
-        description: "nueva tarea",
       },
     ]);
   }
