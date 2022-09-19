@@ -37,7 +37,9 @@ export default function TaskForm() {
           value={description}
           className="bg-slate-300 p-3 w-full mb-2"
         ></textarea>
-        <button className="bg-indigo-500 hover:bg-indigo-400 px-3 py-1 text-white">Guardar</button>
+        <button className="bg-indigo-500 hover:bg-indigo-400 px-3 py-1 text-white">
+          Guardar
+        </button>
       </form>
     </div>
   );
