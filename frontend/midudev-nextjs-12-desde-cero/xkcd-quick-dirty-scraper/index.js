@@ -4,8 +4,6 @@
 import fs from "fs-extra"
 import axios from "axios"
 
-const { writeJSON } = fs
-
 // Primer comic que queremos guardar en el file system.
 const INITIAL_ID_XKCD_COMIC = 2600
 
@@ -38,17 +36,18 @@ for (let id = INITIAL_ID_XKCD_COMIC; id <= MAX_ID_XKCD_COMIC; id++) {
   try {
     // Verificar que el directorio existe. Si no existe, crearlo.
     // https://github.com/jprichardson/node-fs-extra/blob/HEAD/docs/ensureDir.md
-    await fs.ensureDir(COMICS_DIR)
+    /* await fs.ensureDir(COMICS_DIR) */
 
     // Se asegura de que el archivo exista. Si el requerimos que el archivo se
     // cree en un directorio inexistente, se crea. Si el archivo ya existe, NO
     // SE MODIFICA.
     //
     // https://github.com/jprichardson/node-fs-extra/blob/HEAD/docs/ensureFile.md
-    // await fs.ensureFile(file)
+    await fs.ensureFile(file)
 
     // Top level await. Para añadir un archivo en esa ruta hay que tener el
-    // directorio creado. También podríamos hacerlo programáticamente.
+    // directorio creado. También podríamos hacerlo programáticamente. Este
+    // método si sobreescribe el archivo.
     await fs.writeJSON(file, comicToStore)
   } catch (error) {
     console.error(error)
