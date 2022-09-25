@@ -68,10 +68,11 @@ export default function Home({ articles }) {
                     // Un blur para mostrar una imagen como placeholder, pero
                     // funciona con una imagen estática indicando la propiedad
                     // "blurDataURL"
-                    placeholder="blur"
+                    // placeholder="blur"
+
                     // No tiene sentido poner la misma imagen como placeholder,
                     // ya que solo se aplica cuando la imagen no ha cargado.
-                    blurDataURL={article.urlToImage}
+                    // blurDataURL={article.urlToImage}
                   />
                 </a>
               </Link>
