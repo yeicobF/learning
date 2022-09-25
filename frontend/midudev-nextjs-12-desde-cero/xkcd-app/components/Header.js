@@ -1,29 +1,38 @@
-import Link from "next/link"
+import { Container, Text } from "@nextui-org/react"
+import { Link } from "@nextui-org/react"
 
 export default function Header() {
   return (
-    <>
-      <div class="">
-        <sm>
-          next <span style={{ fontWeight: "bold" }}>xkcd</span>
-        </sm>
-      </div>
+    <Container
+      as="header"
+      display="flex"
+      alignItems="center"
+      justify="space-between"
+      className="gap-2"
+    >
+      <span className="flex gap-2">
+        <Text weight="semibold">next</Text>
+        <Text weight="extrabold">xkcd</Text>
+      </span>
       <nav>
-        <ul>
+        <ul className="flex flex-row gap-2 items-center">
           <li>
-            <Link href="/">
-              <a>Home</a>
+            <Link href="/" underline>
+              Home
             </Link>
-            <Link href="/about">
-              <a>About</a>
+          </li>
+          <li>
+            <Link href="/about" underline>
+              About
             </Link>
-            <Link href="/search">
-              <a>Search</a>
+          </li>
+          <li>
+            <Link href="/search" underline>
+              Search
             </Link>
           </li>
         </ul>
       </nav>
-      <div>Header</div>
-    </>
+    </Container>
   )
 }
