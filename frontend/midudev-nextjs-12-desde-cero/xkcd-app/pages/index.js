@@ -5,8 +5,9 @@ import { Container, Card, Row, Text } from "@nextui-org/react"
 import Header from "../components/Header"
 
 import fs from "fs/promises"
+import Link from "next/link"
 
-export default function Home({ comics }) {
+export default function Home({ latestComics }) {
   return (
     <div>
       <Head>
@@ -18,25 +19,23 @@ export default function Home({ comics }) {
       <Header />
 
       <main>
-        <Container>
-          <Card css={{ $$cardColor: "$colors$primary" }}>
-            <Card.Body>
-              <Row justify="center" align="center">
-                <Text h6 size={15} color="white" css={{ m: 0 }}>
-                  NextUI gives you the best developer experience with all the
-                  features you need for building beautiful and modern websites
-                  and applications.
-                </Text>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Container>
+        <h2>Latest Comics</h2>
+        {latestComics.map((comic) => (
+          <Link href={`/comic/${comic.id}`} key={comic.id}>
+            <a>
+              {/* No utilizamos <Image /> porque no conocemos width ni height 
+              de las imágenes y el componente lo pide. */}
+              <img src={comic.img} alt={comic.alt} />
+              {/* <Image layout="fill" src={comic.img} alt={comic.alt} /> */}
+            </a>
+          </Link>
+        ))}
       </main>
     </div>
   )
 }
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
   const files = await fs.readdir("./comics")
   const latestComicsFiles = files.slice(-8, files.length)
 
@@ -53,14 +52,10 @@ export async function getStaticProps(context) {
 
   // Resolvemos las promesas que se crearon cuando se leyeron los archivos.
   const latestComics = await Promise.all(promisesReadFiles)
-  console.log(
-    "🚀 ~ file: index.js ~ line 49 ~ getStaticProps ~ latestComics",
-    latestComics,
-  )
 
   return {
     props: {
-      comics: [],
+      latestComics,
     },
   }
 }
