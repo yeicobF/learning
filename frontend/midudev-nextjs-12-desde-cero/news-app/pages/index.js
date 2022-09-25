@@ -1,16 +1,16 @@
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import PageLayout from "../components/PageLayout";
-import styles from "../styles/Home.module.css";
+import Head from "next/head"
+import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
+import PageLayout from "../components/PageLayout"
+import styles from "../styles/Home.module.css"
 
 // https://newsapi.org/register/success - 25/SEP/2022
 //
 // Con server side rendering podríamos proteger la API_KEY, ya que la petición
 // hace en el servidor y no en el cliente. Pero en este caso no es necesario.
-const API_KEY = "ceec4cbd59bb46d2b7557f264692bb7c";
+const API_KEY = "ceec4cbd59bb46d2b7557f264692bb7c"
 
 // Los props llegan como cadena al cliente, ya que fueron obtenidas desde el
 // servidor.
@@ -43,10 +43,12 @@ export default function Home({ articles }) {
           articles.map((article, index) => (
             <div key={index}>
               <Link href={article.url} style={{ cursor: "pointer" }}>
-                <img
-                  src={article.urlToImage}
-                  alt={`Image for the article ${article.title}`}
-                />
+                <a>
+                  <img
+                    src={article.urlToImage}
+                    alt={`Image for the article ${article.title}`}
+                  />
+                </a>
               </Link>
               <h2>{article.title}</h2>
               <p>{article.description}</p>
@@ -64,9 +66,35 @@ export default function Home({ articles }) {
         </button> */}
       </div>
     </PageLayout>
-  );
+  )
 }
 
+/**
+ * N requests -> se ejecuta 1 vez en build time (o para refrescar la página)
+ *
+ * Pre-renderiza la página entera con la información que se obtiene aquí.
+ *
+ * En desarrollo no se ven mucho las diferencias. Se notan más cuando se hace un
+ * build.
+ */
+export async function getStaticProps() {
+  const response = await fetch(
+    "https://newsapi.org/v2/everything?q=tesla&from=2022-08-25&sortBy=publishedAt&apiKey=ceec4cbd59bb46d2b7557f264692bb7c",
+  )
+  const { articles } = await response.json()
+
+  // Regresamos las props con los elementos que queremos enviar al cliente.
+  return {
+    props: {
+      articles,
+    },
+  }
+}
+
+// N request -> se ejecuta n veces
+// - Para datos que necesitas que sean MUY live.
+// - Tiene demasiados datos dinámicos.
+//
 // A veces se ejecuta desde el cliente y así podemos acceder al prop `context`.
 //
 // Cuando llegamos a esta página desde otra, se recupera el json con la
@@ -80,7 +108,9 @@ export default function Home({ articles }) {
 // renderizarla en el servidor y cuando el usuario entre, ya tendremos
 // artículos. No necesitamos Loading en el cliente, solo indicar que no hay
 // artículos.
-export async function getServerSideProps() {
+//
+// ! Se ejecuta en cada request.
+/* export async function getServerSideProps() {
   const response = await fetch(
     "https://newsapi.org/v2/everything?q=tesla&from=2022-08-25&sortBy=publishedAt&apiKey=ceec4cbd59bb46d2b7557f264692bb7c",
   );
@@ -92,4 +122,4 @@ export async function getServerSideProps() {
       articles,
     },
   };
-}
+} */
