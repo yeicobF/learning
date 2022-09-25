@@ -42,11 +42,36 @@ export default function Home({ articles }) {
         {articles.length > 0 &&
           articles.map((article, index) => (
             <div key={index}>
-              <Link href={article.url} style={{ cursor: "pointer" }}>
+              <Link href={article.url} style={{ cursor: "pointer" }} width="">
                 <a>
-                  <img
+                  {/*
+                   * Image le añade optimizaciones. Incluso añade spans para
+                   * reservar el espacio en la página y evitar el
+                   * Cumulative Layout Shift (CLS). Crea diferentes imágenes
+                   * dependiendo del tamaño del viewport.
+                   *
+                   * Tiene Lazy Loading por defecto.
+                   */}
+                  <Image
                     src={article.urlToImage}
                     alt={`Image for the article ${article.title}`}
+                    width={450}
+                    height={300}
+                    quality={50}
+                    layout="responsive"
+                    // Así podemos dar una condición para que ciertas imágenes
+                    // sean prioritarias.
+                    //
+                    // No hay que hacer que todo sea prioritario. Incurriría en
+                    // el performance.
+                    priority={index < 2}
+                    // Un blur para mostrar una imagen como placeholder, pero
+                    // funciona con una imagen estática indicando la propiedad
+                    // "blurDataURL"
+                    placeholder="blur"
+                    // No tiene sentido poner la misma imagen como placeholder,
+                    // ya que solo se aplica cuando la imagen no ha cargado.
+                    blurDataURL={article.urlToImage}
                   />
                 </a>
               </Link>
@@ -78,8 +103,9 @@ export default function Home({ articles }) {
  * build.
  */
 export async function getStaticProps() {
+  const pageSize = 5
   const response = await fetch(
-    "https://newsapi.org/v2/everything?q=tesla&from=2022-08-25&sortBy=publishedAt&apiKey=ceec4cbd59bb46d2b7557f264692bb7c",
+    `https://newsapi.org/v2/everything?domains=wsj.com&pageSize=${pageSize}&apiKey=ceec4cbd59bb46d2b7557f264692bb7c`,
   )
   const { articles } = await response.json()
 
