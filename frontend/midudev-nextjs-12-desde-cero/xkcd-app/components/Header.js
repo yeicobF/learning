@@ -19,17 +19,23 @@ export default function Header() {
         <ul className="flex flex-row gap-2 items-center">
           <li>
             <Link href="/" passHref>
-              <NextUILink underline>Home</NextUILink>
+              <NextUILink underline className="font-semibold">
+                Home
+              </NextUILink>
             </Link>
           </li>
           <li>
             <Link href="/about" passHref>
-              <NextUILink underline>About</NextUILink>
+              <NextUILink underline className="font-semibold">
+                About
+              </NextUILink>
             </Link>
           </li>
           <li>
             <Link href="/search" passHref>
-              <NextUILink underline>Search</NextUILink>
+              <NextUILink underline className="font-semibold">
+                Search
+              </NextUILink>
             </Link>
           </li>
         </ul>

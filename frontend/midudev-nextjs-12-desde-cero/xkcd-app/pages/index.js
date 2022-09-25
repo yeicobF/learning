@@ -2,10 +2,11 @@ import Head from "next/head"
 import Image from "next/image"
 import styles from "../styles/Home.module.css"
 import { Container, Card, Row, Text } from "@nextui-org/react"
-
 import Header from "../components/Header"
 
-export default function Home() {
+import fs from "fs/promises"
+
+export default function Home({ comics }) {
   return (
     <div>
       <Head>
@@ -33,4 +34,33 @@ export default function Home() {
       </main>
     </div>
   )
+}
+
+export async function getStaticProps(context) {
+  const files = await fs.readdir("./comics")
+  const latestComicsFiles = files.slice(-8, files.length)
+
+  // Arreglo de promesas con el contenido de cada archivo.
+  const promisesReadFiles = latestComicsFiles.map(async (fileName) => {
+    const content = await fs.readFile(`./comics/${fileName}`, "utf-8")
+
+    // No necesitamos hacer un objeto con el spred porque solo regresaremos ese
+    // objeto sin otras propiedades.
+    /* return { ...JSON.parse(content) } */
+
+    return JSON.parse(content)
+  })
+
+  // Resolvemos las promesas que se crearon cuando se leyeron los archivos.
+  const latestComics = await Promise.all(promisesReadFiles)
+  console.log(
+    "🚀 ~ file: index.js ~ line 49 ~ getStaticProps ~ latestComics",
+    latestComics,
+  )
+
+  return {
+    props: {
+      comics: [],
+    },
+  }
 }
