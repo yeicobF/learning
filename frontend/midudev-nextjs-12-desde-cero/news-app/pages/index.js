@@ -41,7 +41,7 @@ export default function Home({ articles }) {
         {articles.length === 0 && <p>No tenemos artículos</p>}
         {articles.length > 0 &&
           articles.map((article, index) => (
-            <div key={index}>
+            <article key={index}>
               <Link href={article.url} style={{ cursor: "pointer" }} width="">
                 <a>
                   {/*
@@ -78,7 +78,7 @@ export default function Home({ articles }) {
               </Link>
               <h2>{article.title}</h2>
               <p>{article.description}</p>
-            </div>
+            </article>
           ))}
 
         {/* <h1>Aprendiendo Next.js desde cero</h1>

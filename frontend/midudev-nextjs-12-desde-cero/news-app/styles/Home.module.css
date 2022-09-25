@@ -4,3 +4,9 @@
   height: 100vh;
   padding: 0 2rem;
 }
+
+.container article:hover {
+  transition: all 0.2s ease-in-out;
+  scale: 1.02;
+  filter: contrast(1.2);
+}
