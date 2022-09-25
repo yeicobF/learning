@@ -16,6 +16,9 @@ const COMICS_DIR = "./comics"
 
 // Vamos a hacer peticiones y descargar los archivos JSON de cada comic en el
 // sistema de archivos.
+//
+// Podríamos hacerlo en paralelo, pero si hacemos eso serían muchas peticiones
+// al mismo tiempo y podrían bloquear el servidor por denegación de servicio (DDoS).
 for (let id = INITIAL_ID_XKCD_COMIC; id <= MAX_ID_XKCD_COMIC; id++) {
   const url = `https://xkcd.com/${id}/info.0.json`
   const file = `${COMICS_DIR}/${id}.json`
