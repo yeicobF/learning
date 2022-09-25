@@ -7,11 +7,19 @@ import PageLayout from "../components/PageLayout";
 import styles from "../styles/Home.module.css";
 
 // https://newsapi.org/register/success - 25/SEP/2022
+//
+// Con server side rendering podríamos proteger la API_KEY, ya que la petición
+// hace en el servidor y no en el cliente. Pero en este caso no es necesario.
 const API_KEY = "ceec4cbd59bb46d2b7557f264692bb7c";
 
-export default function Home() {
-  // const router = useRouter();
-  const [articles, setArticles] = useState([]);
+// Los props llegan como cadena al cliente, ya que fueron obtenidas desde el
+// servidor.
+//
+// De esta forma, en el servidor renderiza la aplicación y en el cliente la
+// hidrata. En el server es un string estático (sin efectos, eventos, ...) y en
+// el cliente se le da vida con Hydration.
+export default function Home({ articles }) {
+  /* const [articles, setArticles] = useState([]);
 
   // Fetch en el cliente.
   useEffect(() => {
@@ -23,15 +31,17 @@ export default function Home() {
         const { articles } = response;
         setArticles(articles);
       });
-  });
+  }); */
 
   return (
     <PageLayout title="NewsApp - Home">
       <div className={styles.container}>
-        {articles.length === 0 && <p>Loading...</p>}
+        {/* No ocupamos el Loading porque si no hay artículos es porque no 
+        llegaron del servidor. */}
+        {articles.length === 0 && <p>No tenemos artículos</p>}
         {articles.length > 0 &&
           articles.map((article, index) => (
-            <article key={index}>
+            <div key={index}>
               <Link href={article.url} style={{ cursor: "pointer" }}>
                 <img
                   src={article.urlToImage}
@@ -40,7 +50,7 @@ export default function Home() {
               </Link>
               <h2>{article.title}</h2>
               <p>{article.description}</p>
-            </article>
+            </div>
           ))}
 
         {/* <h1>Aprendiendo Next.js desde cero</h1>
@@ -55,4 +65,31 @@ export default function Home() {
       </div>
     </PageLayout>
   );
+}
+
+// A veces se ejecuta desde el cliente y así podemos acceder al prop `context`.
+//
+// Cuando llegamos a esta página desde otra, se recupera el json con la
+// información que se necesitaba. Solo se llama cuando se ocupa, ya sea desde el
+// servidor o el cliente. Se descargará, por eso sale en la red.
+//
+// Hacer un fetch desde el server como string siempre será más rápido que en el
+// cliente. No necesitamos un estado.
+//
+// Recuperamos artículos desde el server (fetch desde el server) para
+// renderizarla en el servidor y cuando el usuario entre, ya tendremos
+// artículos. No necesitamos Loading en el cliente, solo indicar que no hay
+// artículos.
+export async function getServerSideProps() {
+  const response = await fetch(
+    "https://newsapi.org/v2/everything?q=tesla&from=2022-08-25&sortBy=publishedAt&apiKey=ceec4cbd59bb46d2b7557f264692bb7c",
+  );
+  const { articles } = await response.json();
+
+  // Regresamos las props con los elementos que queremos enviar al cliente.
+  return {
+    props: {
+      articles,
+    },
+  };
 }

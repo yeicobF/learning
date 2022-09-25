@@ -1,6 +1,6 @@
 .container {
-  display: grid;
-  place-content: center;
+  /* display: grid; */
+  /* place-content: center; */
   height: 100vh;
   padding: 0 2rem;
 }
