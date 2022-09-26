@@ -1,9 +1,10 @@
 import Head from "next/head"
 import { Header } from "components/Header"
 import Image from "next/image"
-import { readFile, stat } from "fs/promises"
 import Link from "next/link"
 import { Link as NextUiLink } from "@nextui-org/react"
+import { readdir, readFile, stat } from "fs/promises"
+import { basename } from "path"
 
 export default function Comic({
   id,
@@ -64,17 +65,36 @@ export default function Comic({
  * Solamente se ejecuta en el build de producción. No será llamado en runtime.
  */
 export async function getStaticPaths() {
-  return {
-    paths: [
+  // Obtener todos los archivos de la carpeta `comics` para saber cuáles
+  // existen.
+  //
+  // Si tuviéramos muchos archivos (1 millón, por ejemplo), no valdría la pena
+  // hacer este procedimiento desde el build. Estaríamos creando un millón de
+  // páginas.
+  const files = await readdir("./comics")
+
+  // Arreglo con todos los ids para mandarlos como params al hacer el build de
+  // las páginas estáticas.
+  const paths = files.map((file) => {
+    // Obtener el nombre de un archivo sin su directorio ni extensión. Hay que
+    // indicar su extensión para que la extraiga de la cadena. Esto nos ayudará
+    // a obtener los IDs de los comics para generar las páginas estáticas en
+    // build time.
+    const id = basename(file, ".json")
+
+    return {
       // En params hay que indicar cada una de las ids que tenemos que generar.
       // entramos a una ruta con un id en este CacheStorage, generaría esa
       // página.
       //
       // Si el id no existe, muestra un 404.
-      { params: { id: "2669" } },
-      { params: { id: "2670" } },
-      { params: { id: "2671" } },
-    ],
+      params: { id },
+    }
+  })
+
+  return {
+    paths,
+    // false or "blocking"
     fallback: false,
   }
 }
