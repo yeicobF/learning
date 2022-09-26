@@ -1,6 +1,9 @@
-import { Container, Text } from "@nextui-org/react"
+import { Button, Container, Text } from "@nextui-org/react"
 import { Link as NextUILink } from "@nextui-org/react"
 import Link from "next/link"
+import { useRouter } from "next/router"
+
+const XKCD_URL = "https://xkcd.com"
 
 export default function Header() {
   return (
@@ -11,9 +14,18 @@ export default function Header() {
       justify="space-between"
       className="gap-2"
     >
-      <h1 className="flex gap-2">
+      <h1 className="flex gap-1.5">
         <Text weight="semibold">next</Text>
-        <Text weight="extrabold">xkcd</Text>
+        <Text weight="bold">
+          <NextUILink
+            href={XKCD_URL}
+            underline
+            color="secondary"
+            rel="noopener noreferrer"
+          >
+            xkcd comics
+          </NextUILink>
+        </Text>
       </h1>
       <nav>
         <ul className="flex flex-row gap-2 items-center">

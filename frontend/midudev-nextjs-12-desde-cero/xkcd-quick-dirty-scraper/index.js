@@ -3,9 +3,12 @@
 // ya podemos desestructurar.
 import fs from "fs-extra"
 import axios from "axios"
+import { getImageSize } from "./getImageSize.js"
+
+const log = (...args) => console.log("[👁️ dirty-scraper]", ...args)
 
 // Primer comic que queremos guardar en el file system.
-const INITIAL_ID_XKCD_COMIC = 2600
+const INITIAL_ID_XKCD_COMIC = 2670
 
 // Último comic que queremos guardar en el file system. En este caso, es el
 // último publicado (2676 -> 23/SEP/2022).
@@ -21,7 +24,9 @@ const COMICS_DIR = "./comics"
 // al mismo tiempo y podrían bloquear el servidor por denegación de servicio (DDoS).
 for (let id = INITIAL_ID_XKCD_COMIC; id <= MAX_ID_XKCD_COMIC; id++) {
   const url = `https://xkcd.com/${id}/info.0.json`
-  const file = `${COMICS_DIR}/${id}.json`
+  const jsonFile = `${COMICS_DIR}/${id}.json`
+
+  log(`Fetching ${url}`)
 
   // Top level await que nos permite hacer porque el proyecto es `type: module`
   // (indicado en el `package.json`).
@@ -29,13 +34,21 @@ for (let id = INITIAL_ID_XKCD_COMIC; id <= MAX_ID_XKCD_COMIC; id++) {
 
   // Desestructuramos para sacar las propiedades que no necesitamos y obtener
   // las restantes en `restOfComic`.
-  const { num, news, transcript, ...restOfComic } = data
+  const { num, news, transcript, img, ...restOfComic } = data
+  log(`Fetched comic #${num}.  Getting image dimensions...`)
+
+  const { height, width } = await getImageSize({ url: img })
+  log(`Got image dimensions: ${width}x${height}`)
 
   const comicToStore = {
     id,
+    img,
+    height,
+    width,
     ...restOfComic,
   }
 
+  // console.log("🚀 ~ file: index.js ~ line 37 ~ comicToStore", comicToStore)
   try {
     // Verificar que el directorio existe. Si no existe, crearlo.
     // https://github.com/jprichardson/node-fs-extra/blob/HEAD/docs/ensureDir.md
@@ -46,12 +59,14 @@ for (let id = INITIAL_ID_XKCD_COMIC; id <= MAX_ID_XKCD_COMIC; id++) {
     // SE MODIFICA.
     //
     // https://github.com/jprichardson/node-fs-extra/blob/HEAD/docs/ensureFile.md
-    await fs.ensureFile(file)
+    await fs.ensureFile(jsonFile)
 
     // Top level await. Para añadir un archivo en esa ruta hay que tener el
     // directorio creado. También podríamos hacerlo programáticamente. Este
     // método si sobreescribe el archivo.
-    await fs.writeJSON(file, comicToStore)
+    await fs.writeJSON(jsonFile, comicToStore)
+    log(`Wrote ${jsonFile}! ✅`)
+    log(`...`)
   } catch (error) {
     console.error(error)
   }

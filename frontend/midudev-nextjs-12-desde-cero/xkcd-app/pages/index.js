@@ -19,17 +19,29 @@ export default function Home({ latestComics }) {
       <Header />
 
       <main>
-        <h2>Latest Comics</h2>
-        {latestComics.map((comic) => (
-          <Link href={`/comic/${comic.id}`} key={comic.id}>
-            <a>
-              {/* No utilizamos <Image /> porque no conocemos width ni height 
-              de las imágenes y el componente lo pide. */}
-              <img src={comic.img} alt={comic.alt} />
-              {/* <Image layout="fill" src={comic.img} alt={comic.alt} /> */}
-            </a>
-          </Link>
-        ))}
+        <h2 className="text-3xl font-bold text-center mb-10">Latest Comics</h2>
+        <section className="grid grid-cols-1 gap-2 max-w-md m-auto sm:grid-cols-2 md:grid-cols-3">
+          {latestComics.map((comic) => (
+            <Link href={`/comic/${comic.id}`} key={comic.id}>
+              <a className="mb-4 pb-4 m-auto">
+                <h3 className="font-bold text-sm text-center pb-2">
+                  {comic.title}
+                </h3>
+                {/* No utilizamos <Image /> porque no conocemos width ni height
+                de las imágenes y el componente lo pide. */}
+                <Image
+                  width={300}
+                  height={300}
+                  layout="intrinsic"
+                  objectFit="contain"
+                  src={comic.img}
+                  alt={comic.alt}
+                />
+                {/* <Image layout="fill" src={comic.img} alt={comic.alt} /> */}
+              </a>
+            </Link>
+          ))}
+        </section>
       </main>
     </div>
   )
