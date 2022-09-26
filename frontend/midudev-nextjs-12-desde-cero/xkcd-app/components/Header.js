@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 
 const XKCD_URL = "https://xkcd.com"
 
-export default function Header() {
+export function Header() {
   return (
     <Container
       as="header"
