@@ -4,11 +4,13 @@
 import fs from "fs-extra"
 import axios from "axios"
 import { getImageSize } from "./getImageSize.js"
+import { log, time } from "./log.js"
 
-const log = (...args) => console.log("[👁️ dirty-scraper]", ...args)
+// Medimos el tiempo de ejecución.
+const endTime = time()
 
 // Primer comic que queremos guardar en el file system.
-const INITIAL_ID_XKCD_COMIC = 2670
+const INITIAL_ID_XKCD_COMIC = 2600
 
 // Último comic que queremos guardar en el file system. En este caso, es el
 // último publicado (2676 -> 23/SEP/2022).
@@ -66,8 +68,11 @@ for (let id = INITIAL_ID_XKCD_COMIC; id <= MAX_ID_XKCD_COMIC; id++) {
     // método si sobreescribe el archivo.
     await fs.writeJSON(jsonFile, comicToStore)
     log(`Wrote ${jsonFile}! ✅`)
-    log(`...`)
+    log(`...\n`)
   } catch (error) {
     console.error(error)
   }
 }
+
+// Terminamos el tiempo de ejecución.
+endTime()

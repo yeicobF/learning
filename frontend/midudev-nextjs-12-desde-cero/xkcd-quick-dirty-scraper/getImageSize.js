@@ -21,7 +21,6 @@ export const getImageSize = ({ url }) => {
         .on("end", () => {
           const buffer = Buffer.concat(chunks)
           const { height, width } = sizeOf(buffer)
-          console.log("🚀 ~ file: getImageSize.js ~ line 24 ~ .on ~ height, width", height, width)
 
           // Resolver la promesa una vez que haya terminado de ejecutar sus
           // operaciones. Quedará pending hasta que se resuelva.
