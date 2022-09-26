@@ -1,9 +1,22 @@
 import Head from "next/head"
 import { Header } from "components/Header"
 import Image from "next/image"
-import { readFile } from "fs/promises"
+import { readFile, stat } from "fs/promises"
+import Link from "next/link"
+import { Link as NextUiLink } from "@nextui-org/react"
 
-export default function Comic({ id, img, alt, title, width, height }) {
+export default function Comic({
+  id,
+  img,
+  alt,
+  title,
+  width,
+  height,
+  hasPrevious,
+  hasNext,
+  prevId,
+  nextId,
+}) {
   return (
     <>
       <Head>
@@ -15,8 +28,24 @@ export default function Comic({ id, img, alt, title, width, height }) {
       <Header />
 
       <main>
-        <h1>{title}</h1>
-        <Image id={id} width={width} height={height} src={img} alt={alt} />
+        <section className="max-w-lg m-auto">
+          <h1 className="font-bold">{title}</h1>
+          <Image id={id} width={width} height={height} src={img} alt={alt} />
+          <p>{alt}</p>
+
+          <footer className="flex gap-2">
+            {hasPrevious && (
+              <Link href={`/comic/${prevId}`} passHref>
+                <NextUiLink>Previous</NextUiLink>
+              </Link>
+            )}
+            {hasNext && (
+              <Link href={`/comic/${nextId}`} passHref>
+                <NextUiLink>Next</NextUiLink>
+              </Link>
+            )}
+          </footer>
+        </section>
       </main>
     </>
   )
@@ -43,6 +72,8 @@ export async function getStaticPaths() {
       //
       // Si el id no existe, muestra un 404.
       { params: { id: "2669" } },
+      { params: { id: "2670" } },
+      { params: { id: "2671" } },
     ],
     fallback: false,
   }
@@ -53,17 +84,30 @@ export async function getStaticProps({ params }) {
   const { id } = params
   const content = await readFile(`./comics/${id}.json`, "utf-8")
   const comic = JSON.parse(content)
-  console.log("🚀 ~ file: [id].js ~ line 56 ~ getStaticProps ~ comic", comic)
 
-  //   const promisesReadFiles = latestComicsFiles.map(async (fileName) => {
-  //     const content = await fs.readFile(`./comics/${fileName}`, "utf-8")
-  //
-  //     return JSON.parse(content)
-  //   })
-  //
-  //   const latestComics = await Promise.all(promisesReadFiles)
+  // Paginación. Ver si hay elementos posteriores y anteriores.
+  const idNumber = +id
+  const prevId = idNumber - 1
+  const nextId = idNumber + 1
+
+  // Para que la promesa se resuelva, deben de resolverse todas. Si una falla,
+  // ya no se resuelve esta promesa.
+  const [prevResult, nextResult] = await Promise.allSettled([
+    // stat indica si existe un archivo o no.
+    stat(`./comics/${prevId}.json`),
+    stat(`./comics/${nextId}.json`),
+  ])
+
+  const hasPrevious = prevResult.status === "fulfilled"
+  const hasNext = nextResult.status === "fulfilled"
 
   return {
-    props: {},
+    props: {
+      ...comic,
+      hasPrevious,
+      hasNext,
+      prevId,
+      nextId,
+    },
   }
 }
