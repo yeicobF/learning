@@ -2,6 +2,7 @@ import Head from "next/head"
 import { Layout } from "components/Layout"
 import Link from "next/link"
 import Image from "next/image"
+import { search } from "services/search"
 
 export default function Component({ query, results }) {
   return (
@@ -25,7 +26,6 @@ export default function Component({ query, results }) {
                   width="50"
                   height="50"
                   alt={result.alt}
-                  title={result.title}
                 />
                 <div>
                   <h2>{result.title}</h2>
@@ -45,6 +45,8 @@ export async function getServerSideProps(context) {
   // romperá el programa. Con un string vacío predeterminado, no se romperá, ya
   // que evidentemente se pasa a string.
   const { q = "" } = query
+
+  const { results } = await search({ query: q })
 
   /**
     Llamar a la API de Algolia para buscar los resultados. Obtenemos un arreglo
@@ -99,10 +101,10 @@ export async function getServerSideProps(context) {
     const res = await fetch(`${host}/api/search?q=${q}`)
     ```
 
-## Servicio interno (nuestro microservicio)
+  ## Servicio interno (nuestro microservicio)
 
-Solo está mal si es un servicio nuestro. No tiene sentido que intentemos hacer
-el fetch de nuestro propio microservicio.
+  Solo está mal si es un servicio nuestro. No tiene sentido que * intentemos hacer
+  el fetch de nuestro propio microservicio.
     */
 
   /* 
@@ -117,9 +119,9 @@ el fetch de nuestro propio microservicio.
 
   // No es lo mejor. En un momento modificaré la implementación. Voy en el
   // minuto [05:34:41/08:25:24] del vídeo.
-  const results = await fetch(
-    `http://localhost:3000/api/search?q=${encodeURIComponent(q)}`,
-  ).then((res) => res.json())
+  // const results = await fetch(
+  //   `http://localhost:3000/api/search?q=${encodeURIComponent(q)}`,
+  // ).then((res) => res.json())
 
   return {
     props: {
