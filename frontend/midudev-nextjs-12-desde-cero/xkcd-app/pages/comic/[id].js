@@ -29,7 +29,10 @@ export default function Comic({
 
       <Layout>
         <section className="max-w-lg m-auto">
-          <h1 className="font-bold text-xl text-center mb-4">{`#${id} - ${title}`}</h1>
+          <h1 className="font-bold text-xl text-center mb-4">
+            <span className="text-emerald-700">{`#${id}`}</span>
+            {` - ${title}`}
+          </h1>
           <div className="max-w-xs m-auto mb-4">
             <Image
               id={id}
