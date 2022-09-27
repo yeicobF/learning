@@ -3,23 +3,16 @@ import { Link as NextUILink } from "@nextui-org/react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-const XKCD_URL = "https://xkcd.com"
-
 export function Header() {
   return (
-    <Container
-      as="header"
-      display="flex"
-      alignItems="center"
-      justify="space-between"
-      className="gap-2"
-    >
-      <h1 className="flex gap-2">
-        <Text weight="bold">next</Text>
-        <Text weight="extrabold">
-          <NextUILink href={XKCD_URL} color="error" rel="noopener noreferrer">
-            xkcd comics
-          </NextUILink>
+    <header className="flex justify-between items-center p-4 max-w-xl m-auto">
+      <h1 className="flex gap-2 hover:opacity-80 transition">
+        <Text weight="bold">
+          <Link href="/" passHref>
+            <NextUILink color="secondary" underline>
+              next xkcd
+            </NextUILink>
+          </Link>
         </Text>
       </h1>
       <nav>
@@ -32,13 +25,6 @@ export function Header() {
             </Link>
           </li>
           <li>
-            <Link href="/about" passHref>
-              <NextUILink underline className="font-semibold">
-                About
-              </NextUILink>
-            </Link>
-          </li>
-          <li>
             <Link href="/search" passHref>
               <NextUILink underline className="font-semibold">
                 Search
@@ -47,6 +33,6 @@ export function Header() {
           </li>
         </ul>
       </nav>
-    </Container>
+    </header>
   )
 }

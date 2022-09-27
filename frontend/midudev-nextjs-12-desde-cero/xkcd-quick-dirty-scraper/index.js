@@ -19,6 +19,13 @@ const INITIAL_ID_XKCD_COMIC = 2600
 const MAX_ID_XKCD_COMIC = 2676
 const COMICS_DIR = "./comics"
 
+// Archivo en donde guardaremos los JSON de todos los comics para subirlos a
+// Algolia y tener los records para las búsquedas.
+const indexFile = `${COMICS_DIR}/index.json`
+
+// Guardaremos cada JSON en un arreglo para luego escribirlo en el archivo.
+const indexFileContent = []
+
 // Vamos a hacer peticiones y descargar los archivos JSON de cada comic en el
 // sistema de archivos.
 //
@@ -50,6 +57,8 @@ for (let id = INITIAL_ID_XKCD_COMIC; id <= MAX_ID_XKCD_COMIC; id++) {
     ...restOfComic,
   }
 
+  indexFileContent.push(comicToStore)
+
   // console.log("🚀 ~ file: index.js ~ line 37 ~ comicToStore", comicToStore)
   try {
     // Verificar que el directorio existe. Si no existe, crearlo.
@@ -73,6 +82,13 @@ for (let id = INITIAL_ID_XKCD_COMIC; id <= MAX_ID_XKCD_COMIC; id++) {
     console.error(error)
   }
 }
+
+// Escribimos el archivo con todos los comics en JSON. Este archivo lo subiré a
+// algolia en los records del índice para las búsquedas.
+await fs.writeJSON(indexFile, indexFileContent)
+log(
+  `Wrote ${indexFileContent.length} (${INITIAL_ID_XKCD_COMIC} - ${MAX_ID_XKCD_COMIC}) comics' info into ${indexFile} content! ✅\n`,
+)
 
 // Terminamos el tiempo de ejecución.
 endTime()
