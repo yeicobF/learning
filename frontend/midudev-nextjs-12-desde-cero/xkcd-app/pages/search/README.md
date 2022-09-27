@@ -96,3 +96,21 @@ se construirá y esto será cíclico porque ninguno podrá terminar.
 Ahora, extrayendo la lógica en otro archivo, podemos importarla desde el
 microservicio y la página para reutilizar la lógica que necesitamos en la
 sección sin tener los problemas mencionados.
+
+## Explicación desde el vídeo del curso
+
+[05:40:08](https://youtu.be/pFT8wD2uRSE?t=20408)
+
+Añadimos latencia innecesaria porque nos haríamos peticiones a nosotros mismos.
+La petición es perder el tiempo.
+
+Lo notaríamos menos porque no ocurre en el build time, pero podría ocurrir en
+otro momento. Sería el mismo problema, pero menos acentuado.
+
+Es mala práctica porque estamos haciendo cosas innecesarias.
+
+Esto solo sucede con Next.js, ya que es la herramienta que nos permite crear el
+microservicio desde la misma aplicación. Podemos llamar a microservicios
+externos con `fetch('https://external-hsot.com')` sin problemas. Hacerlo en el
+mismo host/localhost de los microservicios -
+`fetch(https://mismo-host-o-localhost-de-next)` - que creamos no tiene sentido.
