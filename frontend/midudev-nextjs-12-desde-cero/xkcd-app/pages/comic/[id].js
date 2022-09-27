@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Link as NextUiLink } from "@nextui-org/react"
 import { readdir, readFile, stat } from "fs/promises"
 import { basename } from "path"
+import { Layout } from "components/Layout"
 
 export default function Comic({
   id,
@@ -26,9 +27,7 @@ export default function Comic({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
-
-      <main>
+      <Layout>
         <section className="max-w-lg m-auto">
           <h1 className="font-bold text-xl text-center mb-4">{`#${id} - ${title}`}</h1>
           <div className="max-w-xs m-auto mb-4">
@@ -56,7 +55,7 @@ export default function Comic({
             )}
           </footer>
         </section>
-      </main>
+      </Layout>
     </>
   )
 }
