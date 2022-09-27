@@ -14,15 +14,10 @@ export function Header() {
       justify="space-between"
       className="gap-2"
     >
-      <h1 className="flex gap-1.5">
-        <Text weight="semibold">next</Text>
-        <Text weight="bold">
-          <NextUILink
-            href={XKCD_URL}
-            underline
-            color="secondary"
-            rel="noopener noreferrer"
-          >
+      <h1 className="flex gap-2">
+        <Text weight="bold">next</Text>
+        <Text weight="extrabold">
+          <NextUILink href={XKCD_URL} color="error" rel="noopener noreferrer">
             xkcd comics
           </NextUILink>
         </Text>

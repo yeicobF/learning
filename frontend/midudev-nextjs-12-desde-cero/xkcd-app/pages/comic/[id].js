@@ -30,19 +30,28 @@ export default function Comic({
 
       <main>
         <section className="max-w-lg m-auto">
-          <h1 className="font-bold">{title}</h1>
-          <Image id={id} width={width} height={height} src={img} alt={alt} />
+          <h1 className="font-bold text-xl text-center mb-4">{title}</h1>
+          <div className="max-w-xs m-auto mb-4">
+            <Image
+              id={id}
+              width={width}
+              height={height}
+              src={img}
+              alt={alt}
+              layout="responsive"
+            />
+          </div>
           <p>{alt}</p>
 
-          <footer className="flex gap-2">
+          <footer className="flex gap-2 justify-between mt-4 font-bold">
             {hasPrevious && (
               <Link href={`/comic/${prevId}`} passHref>
-                <NextUiLink>Previous</NextUiLink>
+                <NextUiLink color="secondary">⬅️ Previous</NextUiLink>
               </Link>
             )}
             {hasNext && (
               <Link href={`/comic/${nextId}`} passHref>
-                <NextUiLink>Next</NextUiLink>
+                <NextUiLink color="secondary">Next ➡️</NextUiLink>
               </Link>
             )}
           </footer>
@@ -94,7 +103,8 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    // false or "blocking"
+    // false or "blocking" - Con fallback: false, si vamos a una página que no
+    // tiene id en params, nos mostrará un 404.
     fallback: false,
   }
 }
