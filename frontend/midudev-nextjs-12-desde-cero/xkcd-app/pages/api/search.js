@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   // https://www.algolia.com/doc/api-reference/api-methods/search/
   const { hits } = await index.search(q, {
     // attributesToRetrieve: Atributos que queremos obtener.
-    attributesToRetrieve: ["id", "title", "img", "alt"],
+    attributesToRetrieve: ["id", "title", "img", "alt", "width", "height"],
     // hitsPerPage: Número de resultados que queremos.
     hitsPerPage: 10,
   })
