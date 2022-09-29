@@ -1,5 +1,6 @@
 {
   "LATEST_COMICS": "Últimos comics",
   "SEO_DEFAULT_TITLE": "xkcd - Comics para desarrolladores",
-  "SEARCH_RESULTS_TITLE": "${1} resultados para ${2}"
+  "SEARCH_RESULTS_TITLE": "${1} resultados para ${2}",
+  "SEARCH_RESULTS_MAL": "results for"
 }
