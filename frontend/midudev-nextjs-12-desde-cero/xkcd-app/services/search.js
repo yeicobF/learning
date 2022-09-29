@@ -12,7 +12,20 @@ const client = algoliasearch(
 
 const index = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
 
+// Caché para el cliente. Se usa para evitar que se haga una petición a la API y
+// utilizar lo que tenemos guardado en memoria.
+//
+// Solo funcionaría en la misma navegación del usuario. El Local Storage
+// almacena la información entre navegaciones, pero es más difícil de acceder.
+const CACHE = {}
+
 export const search = async ({ query }) => {
+  if (CACHE[query]) {
+    console.log(`=> from cache: ${query} -> ${CACHE[query].length} results`)
+
+    return { results: CACHE[query] }
+  }
+
   // https://www.algolia.com/doc/api-reference/api-methods/search/
   const { hits } = await index.search(query, {
     // attributesToRetrieve: Atributos que queremos obtener.
@@ -20,6 +33,8 @@ export const search = async ({ query }) => {
     // hitsPerPage: Número de resultados que queremos.
     hitsPerPage: 10,
   })
+
+  CACHE[query] = hits
 
   return { results: hits }
 }

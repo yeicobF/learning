@@ -1,30 +1,40 @@
-import { Button, Container, Text } from "@nextui-org/react"
+import { Text } from "@nextui-org/react"
 import { Link as NextUILink } from "@nextui-org/react"
 import Link from "next/link"
-import { useRouter } from "next/router"
 import { useRef, useState } from "react"
 
 export function Header() {
   const [results, setResults] = useState([])
   const searchRef = useRef()
+
   // Optional chaining porque value podría no existir, ser undefined.
-  const q = searchRef.current?.value
+  const getValue = () => searchRef.current?.value
 
   const handleChange = () => {
-    if (!q) {
+    const q = getValue()
+    console.log("🚀 ~ file: Header.js ~ line 15 ~ handleChange ~ q", q)
+
+    if (!q || q.length <= 1) {
       setResults([])
       return
     }
 
     fetch(`/api/search?q=${q}`)
-      .then((res) => res.json())
+      .then((res) => {
+        console.log("🚀 ~ file: Header.js ~ line 21 ~ .then ~ res", res)
+        return res.json()
+      })
       .then((searchResults) => {
+        console.log(
+          "🚀 ~ file: Header.js ~ line 25 ~ .then ~ searchResults",
+          searchResults,
+        )
         setResults(searchResults)
       })
   }
 
   return (
-    <header className="m-auto flex max-w-xl items-center justify-between p-4">
+    <header className="m-auto flex max-w-xl flex-col items-center justify-between p-4 sm:flex-row">
       <h1 className="flex gap-2 transition hover:opacity-80">
         <Text weight="bold">
           <Link href="/" passHref>
@@ -60,7 +70,7 @@ export function Header() {
                 })}
 
                 <li key="all-results" className="m-0">
-                  <Link href={`/search?q=${q}`}>
+                  <Link href={`/search?q=${getValue()}`}>
                     <a className="block overflow-hidden text-ellipsis whitespace-nowrap px-2 py-1 text-sm font-semibold italic text-gray-400 hover:bg-slate-200">
                       Ver {results.length} resultados
                     </a>
