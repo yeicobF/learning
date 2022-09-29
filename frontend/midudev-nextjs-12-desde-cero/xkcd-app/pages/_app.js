@@ -3,9 +3,21 @@
 //
 import "../styles/globals.css"
 
-import { NextUIProvider } from "@nextui-org/react"
 import Head from "next/head"
-import { I18nProvider } from "context/i18n"
+import { NextUIProvider } from "@nextui-org/react"
+import { I18nProvider, useI18n } from "context/i18n"
+
+const DefaultHeadApp = () => {
+  // Aquí funciona el context porque estará dentro del Provider.
+  const { t } = useI18n()
+
+  return (
+    <Head>
+      <title>{t("SEO_DEFAULT_TITLE")}</title>
+      <link rel="icon" href="/favicon.ico" />
+    </Head>
+  )
+}
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -15,10 +27,9 @@ function MyApp({ Component, pageProps }) {
           Si tenemos el ícono de la página en un sitio, ya no es necesario
           añadirlo en las demás páginas.
         */}
-      <Head>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      {/* Solo aquí necesitamos al provider. */}
       <I18nProvider>
+        <DefaultHeadApp />
         <Component {...pageProps} />
       </I18nProvider>
     </NextUIProvider>

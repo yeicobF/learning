@@ -19,10 +19,26 @@ export function I18nProvider({ children }) {
 
   // Utilizamos un useCallback para que el valor solo cambie cuando cambie el
   // locale. Este es un buen caso de uso del useCallback.
-  // 
+  //
   // `useCallback` will return a memoized version of the callback that only
   // changes if one of the inputs has changed.
-  const t = useCallback((key) => languages[locale][key], [locale])
+  const t = useCallback(
+    (key, ...args) => {
+      // Con los argumentos que nos pasan, podemos hacer interpolaciones y
+      // manejar variables.
+      let translation = languages[locale][key]
+
+      if (args.length === 0) return translation
+
+      args.forEach((value, index) => {
+        translation = translation.replace(`\${${index + 1}}`, value)
+        console.log("🚀 ~ file: i18n.js ~ line 35 ~ args.forEach ~ translation", translation)
+      })
+
+      return translation
+    },
+    [locale],
+  )
 
   return <I18nContext.Provider value={{ t }}>{children}</I18nContext.Provider>
 }
