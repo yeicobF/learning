@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { search } from "services/search"
 
-export default function Component({ query, results }) {
+export default function Search({ query, results }) {
   return (
     <>
       <Head>
@@ -19,7 +19,7 @@ export default function Component({ query, results }) {
         {results.map((result) => {
           return (
             <Link key={result.id} href={`/comic/${result.id}`}>
-              <a className="flex flex-row justify-start bg-slate-300 hover:bg-slate-50 items-center">
+              <a className="flex flex-row items-center justify-start bg-slate-300 hover:bg-slate-50">
                 <Image
                   className="rounded-full"
                   src={result.img}

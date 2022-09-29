@@ -36,13 +36,14 @@ export function Header() {
   return (
     <header className="m-auto flex max-w-xl flex-col items-center justify-between p-4 sm:flex-row">
       <h1 className="flex gap-2 transition hover:opacity-80">
-        <Text weight="bold">
-          <Link href="/" passHref>
-            <NextUILink color="secondary" underline>
-              next xkcd
-            </NextUILink>
-          </Link>
-        </Text>
+        <Link href="/">
+          <a
+            className="underline-offset-2
+          hover:underline  hover:decoration-2"
+          >
+            <span className="font-bold">next</span>xkcd
+          </a>
+        </Link>
       </h1>
       <nav>
         <ul className="flex flex-row items-center gap-2">

@@ -7,8 +7,11 @@ import { Footer } from "components/Footer"
 
 import fs from "node:fs/promises"
 import { Layout } from "components/Layout"
+import { useI18n } from "context/i18n"
 
 export default function Home({ latestComics }) {
+  const { t } = useI18n()
+
   return (
     <>
       <Head>
@@ -17,12 +20,14 @@ export default function Home({ latestComics }) {
       </Head>
 
       <Layout>
-        <h2 className="text-3xl font-bold text-center mb-10">Latest Comics</h2>
-        <section className="grid grid-cols-1 gap-2 max-w-lg m-auto sm:grid-cols-2 md:grid-cols-3">
+        <h2 className="mb-10 text-center text-3xl font-bold">
+          {t("LATEST_COMICS")}
+        </h2>
+        <section className="m-auto grid max-w-lg grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
           {latestComics.map((comic) => (
             <Link href={`/comic/${comic.id}`} key={comic.id}>
-              <a className="mb-4 pb-4 m-auto">
-                <h3 className="font-bold text-sm text-center pb-2">
+              <a className="m-auto mb-4 pb-4">
+                <h3 className="pb-2 text-center text-sm font-bold">
                   {comic.title}
                 </h3>
                 {/* No utilizamos <Image /> porque no conocemos width ni height
