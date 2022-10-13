@@ -3,5 +3,6 @@ module.exports = {
   rules: {
     quotes: ["warn", "double"],
     "comma-dangle": ["warn", "always-multiline"],
+    "react/react-in-jsx-scope": "off",
   },
 }
