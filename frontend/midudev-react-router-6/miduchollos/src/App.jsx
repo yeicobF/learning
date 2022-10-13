@@ -1,4 +1,4 @@
-import { Link, Route, Routes, useParams } from "react-router-dom"
+import { Link, Route, Routes, useParams, Outlet } from "react-router-dom"
 import "./App.css"
 
 // Un componente devuelve elementos. El componente es la función sin ejecutar.
@@ -41,11 +41,27 @@ const Tacos = () => {
     <div>
       <h1>Tacos</h1>
       <h2>{taco}</h2>
+      {/* Añadimos una ruta relativa a la actual. No le ponemos la diagonal
+        al inicio por lo mismo. De esta manera, preservamos la ruta anterior.
+       */}
+      <Link to="details">Ir a detalles</Link>
+      {/* Con Outlet indicamos en dónde se renderizarán las rutas anidadas. */}
+      <Outlet />
     </div>
   )
 }
 
-function App () {
+const TacoIndex = () => {
+  return <h1>Index Route de Tacos</h1>
+}
+
+const TacoDetails = () => {
+  const { taco } = useParams()
+
+  return <h1>Taco Details {taco}</h1>
+}
+
+function App() {
   return (
     <div className="App">
       <header>
@@ -65,7 +81,31 @@ function App () {
         {/* No hay que enviar el componente, sino el elemento. Si pasamos solo el componente como {Home}, no funcionará correctamente. */}
         <Route path="/" element={<Home />} />
         <Route path="/search-page" element={<SearchPage />} />
-        <Route path="/tacos/:taco" element={<Tacos />} />
+        {/* Enviamos un segmento dinámico. */}
+        {/* <Route path="/tacos/:taco" element={<Tacos />}>
+          <Route path="details" element={<TacoDetails />} />
+        </Route> */}
+
+        {/* Algo así sería si definieramos rutas anidadas y un index. Esto complicaría la estructura de las rutas. Habría que modificar detalles de implementación. */}
+        <Route path="/tacos/:taco" element={<Tacos />}>
+          <Route index element={<TacoIndex />} />
+          <Route path="details" element={<TacoDetails />} />
+        </Route>
+
+        {/* A pesar de que la ruta '/tacos/:taco' está definida antes, se sigue renderizando esta cuadno accedemos a la ruta. Antes no era así, sino que era por orden de definición. */}
+        <Route
+          path="/tacos/midutaco"
+          element={<h1 style={{ color: "red" }}>Midutaco</h1>}
+        />
+        {/* Este es un 404 'soft', ya que está ocurriendo en el cliente. No
+          e indicamos a Google Bot con un status code al navegador de que no
+          existe la ruta. Esto lo haría el servidor. Es imposible que desde el cliente tengamos un status code 404.
+
+          Lo que sí podríamos hacer es redireccionar a una ruta del servidor
+          que realmente devuelva un código 404. En el cliente devuelve un
+          código de error 200 siempre.
+         */}
+        <Route path="*" element={<h1>Not Found</h1>} />
       </Routes>
     </div>
   )
