@@ -1,10 +1,46 @@
-import { Link, Route, Routes, useParams, Outlet } from "react-router-dom"
+import {
+  Link,
+  Route,
+  Routes,
+  useParams,
+  Outlet,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom"
 import "./App.css"
+import { useAuth } from "./context/useAuth"
 import { NavLink } from "./NavLink"
 
 // Un componente devuelve elementos. El componente es la función sin ejecutar.
 // Es lo que fabrica los elementos. Podemos tener un componente con 80 elementos.
 const Home = () => <h1>Home</h1>
+
+const Login = () => {
+  const { login, isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+  const { state } = useLocation()
+
+  // Aquí obtenemos el estado que hayamos enviado en navigate. Así, después de
+  // la redirección cuando el usuario inicie sesión, podemos ir a la ruta a la
+  // que quería ir. Incluso podríamos enviar otra información como imágenes para
+  // no ver un placeholder default, sino la imagen que hayamos enviado en el
+  // state.
+  /* location.state */
+
+  const handleClick = () => {
+    const nextPath = state?.location?.pathname ?? "/"
+    login()
+    navigate(nextPath)
+  }
+
+  return (
+    <div>
+      <h1>Login</h1>
+      <button onClick={handleClick}>Login</button>
+    </div>
+  )
+}
 
 const SearchPage = () => {
   const tacos = [
@@ -62,7 +98,23 @@ const TacoDetails = () => {
   return <h1>Taco Details {taco}</h1>
 }
 
-function App() {
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated } = useAuth()
+  const location = useLocation()
+
+  if (!isAuthenticated) {
+    // Antes Navigate era Redirect. Le podemos pasar la ruta en state, por
+    // ejemplo. Así, una vez que inicie sesión, podría ir a la ruta correcta o
+    // algo similar.
+    return <Navigate to="/login" state={{ location }} />
+  }
+
+  return children
+}
+
+function App () {
+  const { isAuthenticated, logout } = useAuth()
+
   return (
     <div className="App">
       <header>
@@ -76,22 +128,44 @@ function App() {
               <NavLink to="/search-page">Search Page</NavLink>
             </li>
           </ul>
+          {isAuthenticated && <button onClick={logout}>Logout</button>}
         </nav>
       </header>
       <Routes>
         {/* No hay que enviar el componente, sino el elemento. Si pasamos solo el componente como {Home}, no funcionará correctamente. */}
         <Route path="/" element={<Home />} />
-        <Route path="/search-page" element={<SearchPage />} />
+
+        <Route
+          path="/search-page"
+          element={
+            <ProtectedRoute>
+              <SearchPage />
+            </ProtectedRoute>
+          }
+        />
+
         {/* Enviamos un segmento dinámico. */}
+        <Route
+          path="/tacos/:taco"
+          element={
+            <ProtectedRoute>
+              <Tacos />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="details" element={<TacoDetails />} />
+        </Route>
         {/* <Route path="/tacos/:taco" element={<Tacos />}>
           <Route path="details" element={<TacoDetails />} />
         </Route> */}
 
         {/* Algo así sería si definieramos rutas anidadas y un index. Esto complicaría la estructura de las rutas. Habría que modificar detalles de implementación. */}
-        <Route path="/tacos/:taco" element={<Tacos />}>
+        {/* <Route path="/tacos/:taco" element={<Tacos />}>
           <Route index element={<TacoIndex />} />
           <Route path="details" element={<TacoDetails />} />
-        </Route>
+        </Route> */}
+
+        <Route path="/login" element={<Login />} />
 
         {/* A pesar de que la ruta '/tacos/:taco' está definida antes, se sigue renderizando esta cuadno accedemos a la ruta. Antes no era así, sino que era por orden de definición. */}
         <Route
