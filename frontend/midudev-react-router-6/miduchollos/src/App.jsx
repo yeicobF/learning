@@ -20,6 +20,12 @@ const Login = () => {
   const { login, isAuthenticated } = useAuth()
   const navigate = useNavigate()
   const { state } = useLocation()
+  const nextPath = state?.location?.pathname ?? "/"
+
+  // No logré hacer que al ya tener la sesión iniciada, me redirigiera a otra página.
+  /* if (isAuthenticated) {
+    navigate(nextPath)
+  } */
 
   // Aquí obtenemos el estado que hayamos enviado en navigate. Así, después de
   // la redirección cuando el usuario inicie sesión, podemos ir a la ruta a la
@@ -29,7 +35,6 @@ const Login = () => {
   /* location.state */
 
   const handleClick = () => {
-    const nextPath = state?.location?.pathname ?? "/"
     login()
     navigate(nextPath)
   }
@@ -112,7 +117,7 @@ const ProtectedRoute = ({ children }) => {
   return children
 }
 
-function App () {
+function App() {
   const { isAuthenticated, logout } = useAuth()
 
   return (
