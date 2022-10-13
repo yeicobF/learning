@@ -4,5 +4,6 @@ module.exports = {
     quotes: ["warn", "double"],
     "comma-dangle": ["warn", "always-multiline"],
     "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
   },
 }

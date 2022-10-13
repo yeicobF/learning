@@ -13,3 +13,8 @@
 .read-the-docs {
   color: #888;
 }
+
+nav a.is-active {
+  font-weight: bolder;
+  /* pointer-events: none; */
+}

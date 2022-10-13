@@ -1,5 +1,6 @@
 import { Link, Route, Routes, useParams, Outlet } from "react-router-dom"
 import "./App.css"
+import { NavLink } from "./NavLink"
 
 // Un componente devuelve elementos. El componente es la función sin ejecutar.
 // Es lo que fabrica los elementos. Podemos tener un componente con 80 elementos.
@@ -69,10 +70,10 @@ function App() {
         <nav>
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <NavLink to="/">Home</NavLink>
             </li>
             <li>
-              <Link to="/search-page">Search Page</Link>
+              <NavLink to="/search-page">Search Page</NavLink>
             </li>
           </ul>
         </nav>
