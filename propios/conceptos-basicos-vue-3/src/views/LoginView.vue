@@ -34,7 +34,6 @@ watch(loginError, () => {
 
 <template>
   <Form
-    class="grid"
     :validationSchema="schema"
     v-slot="{ meta: formMeta }"
     @submit="onSubmit"
