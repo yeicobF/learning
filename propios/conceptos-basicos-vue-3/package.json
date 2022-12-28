@@ -1,0 +1,34 @@
+{
+  "name": "conceptos-basicos-vue-3",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test:unit": "vitest --environment jsdom --root src/",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "@picocss/pico": "1.5.6",
+    "@vueuse/core": "^9.9.0",
+    "pinia": "2.0.28",
+    "swrv": "^1.0.2",
+    "vee-validate": "^4.7.3",
+    "vue": "3.2.45",
+    "vue-router": "4.1.6",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "1.2.0",
+    "@vitejs/plugin-vue": "4.0.0",
+    "@vue/eslint-config-prettier": "7.0.0",
+    "@vue/test-utils": "2.2.6",
+    "eslint": "8.30.0",
+    "eslint-plugin-vue": "9.8.0",
+    "jsdom": "20.0.3",
+    "prettier": "2.8.1",
+    "vite": "4.0.3",
+    "vitest": "0.26.2"
+  }
+}
