@@ -29,7 +29,8 @@ function App () {
   }
 
   const toggleSortByCountry = () => {
-    const newSortingValue = sorting === SortBy.NONE ? SortBy.COUNTRY : SortBy.NONE
+    const newSortingValue =
+      sorting === SortBy.NONE ? SortBy.COUNTRY : SortBy.NONE
     // Forma que suele ser necesaria cuando dependemos del mismo valor o
     // queremos hacer otras cosas.
     setSorting(newSortingValue)
@@ -75,23 +76,6 @@ function App () {
   }, [users, filterCountry])
 
   /**
-   * `sort` muta el array original, por lo que al volver a ordenar como
-   *    originalmente estaba, seguiría ordenado. `toSorted` no está disponible
-   *    en todos los navegadores, pero Babel/SWC lo transforman. Este método no
-   *    muta el arreglo original.
-   * - Otra opción: [...users].sort((a, b) => { ... })
-   */
-  const sortUsers = (users: User[]) => {
-    return SortBy.COUNTRY === sorting
-      ? users.toSorted((a, b) => {
-        // Comparar strings dependiendo del idioma del usuario.
-        // Si lo devolvemos directamente, lo hará de forma ascendente.
-        return a.location.country.localeCompare(b.location.country)
-      })
-      : users
-  }
-
-  /**
    * En las dependencias definimos cuáles son los valores que queremos que
    * modifiquen de nuevo el valor de `sortedUsers`. Quiero que la información la
    * memoices y que no la vuelvas a calcular, sino hasta que cambie alguna
@@ -99,7 +83,30 @@ function App () {
    */
   const sortedUsers = useMemo(() => {
     console.log('sortedUsers memo')
-    return sortUsers(filteredUsers)
+
+    if (sorting === SortBy.NONE) return filteredUsers
+
+    // En lugar de jugar con las condiciones, lo hacemos con las propiedades.
+    // Esto devuelve una función que extrae la propiedad que queremos comparar.
+    // - Un `Record` es un objeto que tiene como clave un string y como valor.
+    //   La utilizamos para tipar un objeto.
+    const compareProperties: Record<string, (user: User) => any> = {
+      [SortBy.COUNTRY]: (user) => user.location.country,
+      [SortBy.NAME]: (user) => user.name.first,
+      [SortBy.LAST]: (user) => user.name.last
+    }
+
+    /**
+     * `sort` muta el array original, por lo que al volver a ordenar como
+     *    originalmente estaba, seguiría ordenado. `toSorted` no está disponible
+     *    en todos los navegadores, pero Babel/SWC lo transforman. Este método no
+     *    muta el arreglo original.
+     * - Otra opción: [...users].sort((a, b) => { ... })
+     */
+    return filteredUsers.toSorted((a, b) => {
+      const extractProperty = compareProperties[sorting]
+      return extractProperty(a).localeCompare(extractProperty(b))
+    })
   }, [filteredUsers, sorting])
 
   return (
