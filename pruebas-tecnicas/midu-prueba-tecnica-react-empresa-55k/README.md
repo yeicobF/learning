@@ -12,7 +12,7 @@ provided by https://randomuser.me/.
 
 Here are the steps to follow:
 
-- [] Fetch 100 rows of data using the API.
+- [x] Fetch 100 rows of data using the API.
 - [] Display the data in a table format, similar to the example.
 - [] Provide the option to color rows as shown in the exmaple.
 - [] Allow the data to be sorted by country as demonstrated in the example.
