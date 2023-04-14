@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
-import { type User } from './types.d'
+import { SortBy, type User } from './types.d'
 import { UsersList } from './components/UsersList'
 
 const USERS_API_URL = 'https://randomuser.me/api'
@@ -9,7 +9,7 @@ const RESULTS_NUMBER = 100
 function App () {
   const [users, setUsers] = useState<User[]>([])
   const [showColors, setShowColors] = useState<boolean>(false)
-  const [sortByCountry, setSortByCountry] = useState<boolean>(false)
+  const [sorting, setSorting] = useState<SortBy>(SortBy.NONE)
   const [filterCountry, setFilterCountry] = useState<string | null>(null)
 
   /**
@@ -24,16 +24,15 @@ function App () {
    */
   const originalUsers = useRef<User[]>([])
 
-  console.log({ showColors })
-
   const toggleColors = () => {
     setShowColors(!showColors)
   }
 
   const toggleSortByCountry = () => {
+    const newSortingValue = sorting === SortBy.NONE ? SortBy.COUNTRY : SortBy.NONE
     // Forma que suele ser necesaria cuando dependemos del mismo valor o
     // queremos hacer otras cosas.
-    setSortByCountry((previousState) => !previousState)
+    setSorting(newSortingValue)
   }
 
   const handleDelete = (email: string) => {
@@ -79,7 +78,7 @@ function App () {
    * - Otra opción: [...users].sort((a, b) => { ... })
    */
   const sortUsers = (users: User[]) => {
-    return sortByCountry
+    return SortBy.COUNTRY === sorting
       ? users.toSorted((a, b) => {
         // Comparar strings dependiendo del idioma del usuario.
         // Si lo devolvemos directamente, lo hará de forma ascendente.
@@ -97,7 +96,7 @@ function App () {
   const sortedUsers = useMemo(() => {
     console.log('sortedUsers memo')
     return sortUsers(filteredUsers)
-  }, [filteredUsers, sortByCountry])
+  }, [filteredUsers, sorting])
 
   return (
     <div className="App">
@@ -105,7 +104,7 @@ function App () {
       <header>
         <button onClick={toggleColors}>Colorear filas</button>
         <button onClick={toggleSortByCountry}>
-          {sortByCountry ? 'No ordenar por país' : 'Ordenar por país'}
+          {sorting === SortBy.COUNTRY ? 'No ordenar por país' : 'Ordenar por país'}
         </button>
         <button onClick={resetUsers}>Reiniciar estado</button>
         <input
