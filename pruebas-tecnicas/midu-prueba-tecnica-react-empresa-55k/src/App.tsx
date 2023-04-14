@@ -45,6 +45,10 @@ function App () {
     setUsers(originalUsers.current)
   }
 
+  const handleChangeSort = (sort: SortBy) => {
+    setSorting(sort)
+  }
+
   useEffect(() => {
     fetch(`${USERS_API_URL}?results=${RESULTS_NUMBER}`)
       .then(async (res) => await res.json())
@@ -104,7 +108,9 @@ function App () {
       <header>
         <button onClick={toggleColors}>Colorear filas</button>
         <button onClick={toggleSortByCountry}>
-          {sorting === SortBy.COUNTRY ? 'No ordenar por país' : 'Ordenar por país'}
+          {sorting === SortBy.COUNTRY
+            ? 'No ordenar por país'
+            : 'Ordenar por país'}
         </button>
         <button onClick={resetUsers}>Reiniciar estado</button>
         <input
@@ -115,6 +121,7 @@ function App () {
         />
       </header>
       <UsersList
+        changeSorting={handleChangeSort}
         showColors={showColors}
         users={sortedUsers}
         deleteUser={handleDelete}

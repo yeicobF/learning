@@ -17,3 +17,15 @@ table * {
 .table--showColors tr:nth-child(even) {
   background: #555;
 }
+
+header {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.pointer {
+  cursor: crosshair;
+}
