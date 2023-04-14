@@ -4,3 +4,16 @@
   text-align: center;
   width: 100%;
 }
+
+table * {
+  transition: all 0.2s ease;
+}
+
+/* En CSS, los índices (n) empiezan en 1. */
+.table--showColors tr:nth-child(odd) {
+  background: #333;
+}
+
+.table--showColors tr:nth-child(even) {
+  background: #555;
+}

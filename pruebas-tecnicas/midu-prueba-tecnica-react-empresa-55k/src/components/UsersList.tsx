@@ -23,15 +23,11 @@ export function UsersList ({ deleteUser, showColors, users }: Props) {
         </tr>
       </thead>
 
-      <tbody>
-        {users.map((user, index) => {
-          const backgroundColor = index % 2 === 0 ? '#333' : '#555'
-          const color = showColors ? backgroundColor : 'transparent'
-          console.log(color)
-
+      <tbody className={showColors ? 'table--showColors' : 'table'}>
+        {users.map((user) => {
           return (
             // Use `email` or `uuid` as key, because they are unique.
-            <tr key={user.email} style={{ backgroundColor: color }}>
+            <tr key={user.email}>
               <td>
                 <img src={user.picture.thumbnail} />
               </td>
