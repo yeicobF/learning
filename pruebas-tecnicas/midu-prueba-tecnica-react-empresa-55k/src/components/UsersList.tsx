@@ -7,6 +7,32 @@ interface Props {
   users: User[]
 }
 
+interface TableHeader {
+  label: string
+  sortBy?: SortBy
+}
+
+const TABLE_HEADERS: Record<string, TableHeader> = {
+  picture: {
+    label: 'Foto'
+  },
+  name: {
+    label: 'Nombre',
+    sortBy: SortBy.NAME
+  },
+  last: {
+    label: 'Apellido',
+    sortBy: SortBy.LAST
+  },
+  country: {
+    label: 'País',
+    sortBy: SortBy.COUNTRY
+  },
+  actions: {
+    label: 'Acciones'
+  }
+}
+
 // table, thead, tbody <- key elements in a table.
 // tr <- table row
 // th <- table header
@@ -21,32 +47,19 @@ export function UsersList ({
     <table width="100%">
       <thead>
         <tr>
-          <th>Foto</th>
-          <th
-            className="pointer"
-            onClick={() => {
-              changeSorting(SortBy.NAME)
-            }}
-          >
-            Nombre
-          </th>
-          <th
-            className="pointer"
-            onClick={() => {
-              changeSorting(SortBy.LAST)
-            }}
-          >
-            Apellido
-          </th>
-          <th
-            className="pointer"
-            onClick={() => {
-              changeSorting(SortBy.COUNTRY)
-            }}
-          >
-            País
-          </th>
-          <th>Acciones</th>
+          {Object.values(TABLE_HEADERS).map(({ label, sortBy }) => {
+            return (
+              <th
+                key={label}
+                onClick={() => {
+                  sortBy && changeSorting(sortBy)
+                }}
+                className={sortBy && 'pointer'}
+              >
+                {label}
+              </th>
+            )
+          })}
         </tr>
       </thead>
 
