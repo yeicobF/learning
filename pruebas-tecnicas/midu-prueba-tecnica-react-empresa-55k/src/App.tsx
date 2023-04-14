@@ -23,6 +23,12 @@ function App () {
     setSortByCountry((previousState) => !previousState)
   }
 
+  const handleDelete = (email: string) => {
+    const fiteredUsers = users.filter((user) => user.email !== email)
+
+    setUsers(fiteredUsers)
+  }
+
   useEffect(() => {
     fetch(`${USERS_API_URL}?results=${RESULTS_NUMBER}`)
       .then(async (res) => await res.json())
@@ -56,7 +62,7 @@ function App () {
           {sortByCountry ? 'No ordenar por país' : 'Ordenar por país'}
         </button>
       </header>
-      <UsersList showColors={showColors} users={sortedUsers} />
+      <UsersList showColors={showColors} users={sortedUsers} deleteUser={handleDelete} />
     </div>
   )
 }

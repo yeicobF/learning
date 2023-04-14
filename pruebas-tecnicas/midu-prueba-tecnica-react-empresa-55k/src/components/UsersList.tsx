@@ -1,6 +1,7 @@
 import { type User } from '../types.d'
 
 interface Props {
+  deleteUser: (email: string) => void
   showColors: boolean
   users: User[]
 }
@@ -9,7 +10,7 @@ interface Props {
 // tr <- table row
 // th <- table header
 // td <- table data (cell)
-export function UsersList ({ showColors, users }: Props) {
+export function UsersList ({ deleteUser, showColors, users }: Props) {
   return (
     <table width='100%'>
       <thead>
@@ -29,7 +30,8 @@ export function UsersList ({ showColors, users }: Props) {
           console.log(color)
 
           return (
-            <tr key={index} style={{ backgroundColor: color }}>
+            // Use `email` or `uuid` as key, because they are unique.
+            <tr key={user.email} style={{ backgroundColor: color }}>
               <td>
                 <img src={user.picture.thumbnail} />
               </td>
@@ -37,7 +39,9 @@ export function UsersList ({ showColors, users }: Props) {
               <td>{user.name.last}</td>
               <td>{user.location.country}</td>
               <td>
-                <button>Borrar</button>
+                <button onClick={() => {
+                  deleteUser(user.email)
+                }}>Borrar</button>
               </td>
             </tr>
           )
