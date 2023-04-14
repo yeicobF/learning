@@ -1,3 +1,12 @@
+declare global {
+  interface Array<T> {
+    // Como queremos utilizar un método de Array llamado toSorted y no está
+    // disponible en todos los navegadores, e incluso ESLint no lo detecta, lo
+    // definimos manualmente para que TypeScript lo reconozca.
+    toSorted(compareFn?: (a: T, b: T) => number): T[]
+  }
+}
+
 export interface APIResults {
   results: User[]
   info: Info
