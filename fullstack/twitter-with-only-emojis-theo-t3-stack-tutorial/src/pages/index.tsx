@@ -7,6 +7,7 @@ import { type RouterOutputs, api } from "~/utils/api";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
+import { LoadingPage } from "~/components/loading";
 
 dayjs.extend(relativeTime);
 
@@ -62,9 +63,7 @@ const PostView = (props: PostWithUser) => {
   );
 };
 
-const Home: NextPage = () => {
-  const user = useUser();
-
+const Feed = () => {
   /**
    * TRPC nos deja crear funciones que se ejecutan en el servidor, que en este
     caso es Vercel. Nos permite obtener datos de la BD, por ejemplo. No nos
@@ -72,11 +71,32 @@ const Home: NextPage = () => {
     BD, facilitando incluso la forma en la que nos conectamos para obtener esta
     información, a pesar de que se encuentre en otro servidor. 
   */
-  const { data, isLoading } = api.posts.getAll.useQuery();
+  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
 
-  if (isLoading) return <div>Loading...</div>;
+  // Return empty div if BOTH aren't loaded, since user tends to load faster.
+  if (postsLoading) return <LoadingPage />;
 
-  if (!data) return <div>Something went wrong</div>;
+  if (!data) return <div>Something went wrong!</div>;
+
+  return (
+    <div className="flex flex-col">
+      {[...data, ...data]?.map((fullPost) => (
+        <PostView {...fullPost} key={fullPost.post.id} />
+      ))}
+    </div>
+  );
+};
+
+const Home: NextPage = () => {
+  const { isLoaded: userLoaded, isSignedIn } = useUser();
+
+  // Start fetching ASAP.
+  // > Con React Query, solo se necesita obtener los datos. Mientras que los
+  // datos sean los mismos, podemos utilizar la caché.
+  api.posts.getAll.useQuery();
+
+  // Return empty div if user isn't loaded.
+  if (!userLoaded) return <div />;
 
   return (
     <>
@@ -88,18 +108,15 @@ const Home: NextPage = () => {
       <main className="flex h-screen justify-center">
         <div className="h-full w-full border-x border-slate-400 md:max-w-2xl">
           <div className="flex border-b border-slate-400 p-4">
-            {!user.isSignedIn && (
+            {!isSignedIn && (
               <div className="flex justify-center">
                 <SignInButton />
               </div>
             )}
-            {user.isSignedIn && <CreatePostWizard />}
+            {isSignedIn && <CreatePostWizard />}
           </div>
-          <div className="flex flex-col">
-            {[...data, ...data]?.map((fullPost) => (
-              <PostView {...fullPost} key={fullPost.post.id} />
-            ))}
-          </div>
+
+          <Feed />
         </div>
       </main>
     </>
