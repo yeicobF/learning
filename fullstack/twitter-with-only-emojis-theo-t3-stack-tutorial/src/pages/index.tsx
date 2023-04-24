@@ -5,9 +5,16 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   const user = useUser();
+
+  /**
+   * TRPC nos deja crear funciones que se ejecutan en el servidor, que en este
+    caso es Vercel. Nos permite obtener datos de la BD, por ejemplo. No nos
+    conectamos directamente a la BD. Desplegamos esta forma de conectarnos a la
+    BD, facilitando incluso la forma en la que nos conectamos para obtener esta
+    información, a pesar de que se encuentre en otro servidor. 
+  */
+  const { data } = api.example.getAll.useQuery();
 
   return (
     <>
