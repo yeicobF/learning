@@ -14,7 +14,7 @@ const Home: NextPage = () => {
     BD, facilitando incluso la forma en la que nos conectamos para obtener esta
     información, a pesar de que se encuentre en otro servidor. 
   */
-  const { data } = api.example.getAll.useQuery();
+  const { data } = api.posts.getAll.useQuery();
 
   return (
     <>
@@ -28,7 +28,11 @@ const Home: NextPage = () => {
           {!user.isSignedIn && <SignInButton />}
           {user.isSignedIn && <SignOutButton />}
         </div>
-        <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
+          {
+            data?.map((post) => (
+              <div key={post.id}>{post.content}</div>
+            ))
+          }
       </main>
     </>
   );
