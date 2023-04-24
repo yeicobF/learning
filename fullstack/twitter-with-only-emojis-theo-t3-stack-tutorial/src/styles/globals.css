@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+Si no ponemos los estilos base, no aparecerán en la carga inicial de la
+aplicación. Por esa razón, los indicamos primero en el archivo de estilos
+globales.
+*/
+body {
+  @apply bg-black text-slate-100;
+}
