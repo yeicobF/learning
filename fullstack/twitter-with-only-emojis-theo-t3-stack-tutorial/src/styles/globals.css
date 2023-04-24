@@ -8,5 +8,5 @@ aplicación. Por esa razón, los indicamos primero en el archivo de estilos
 globales.
 */
 body {
-  @apply bg-black text-slate-100;
+  @apply bg-black text-slate-100 font-semibold;
 }
