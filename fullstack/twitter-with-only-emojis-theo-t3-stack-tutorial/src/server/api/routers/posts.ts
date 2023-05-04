@@ -59,6 +59,27 @@ const ratelimit = new Ratelimit({
 });
 
 export const postsRouter = createTRPCRouter({
+  getById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const post = await ctx.prisma.post.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!post) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      const [postWithUserData] = await addUserDataToPosts([post]);
+      // return (await addUserDataToPosts([post]))[0]
+
+      return postWithUserData;
+    }),
+
   // Un procedure es un método para generar una función que se llama desde el
   // cliente. Al ser público, indicamos que cualquier usuario puede acceder a
   // los posts.
