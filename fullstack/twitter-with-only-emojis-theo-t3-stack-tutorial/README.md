@@ -18,6 +18,12 @@ In this particular project, we used `Upstash` with a package for rate limiting.
 - [Rate limiting with Upstash](https://youtu.be/YkOSUVzOAA4?t=5880)
 - [upstash/ratelimit](https://github.com/upstash/ratelimit)
 
+## If this was a real project
+
+- The forms management would be implemented using [React Hook
+  Form](https://react-hook-form.com/) and Zod for validation in the client, and
+  not only rely on the server response.
+
 ## Create T3 App Info
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
