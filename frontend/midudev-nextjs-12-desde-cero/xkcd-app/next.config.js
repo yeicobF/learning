@@ -20,7 +20,8 @@ const nextConfig = {
   "localeDetection".
   */
   i18n: {
-    locales: ["en", "es"],
+    locales: ["en"],
+    // locales: ["en", "es"],
     defaultLocale: "en",
   },
 }
