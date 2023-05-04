@@ -24,6 +24,34 @@ In this particular project, we used `Upstash` with a package for rate limiting.
   Form](https://react-hook-form.com/) and Zod for validation in the client, and
   not only rely on the server response.
 
+## `getServerSideProps`
+
+- The function will run on every request once deployed.
+
+### Problems
+
+- We loose al the typing of the data.
+- It will block every request.
+- It won't be cached, not having cached pages.
+- It may take longer to load.
+- Get the types from the server to the client is not easy.
+- We will not be using `TRPC` to fetch the data.
+
+## TRPC Server-Side Helpers
+
+It is a feature which can prehydrate some data ahead of time. We must use
+`getStaticProps`. Using `getStaticProps` doesn't mean that this can't re-run,
+but that it will be treated mostly as a static asset and we can trigger
+revalidation when and how we choose.
+
+As it is mentioned in the docs,
+
+> "`createServerSideHelpers` provides you with a set of helper functions that
+> you can use to prefetch queries on the server. This is useful for SSG, but
+> also for SSR if you opt not to use `ssr: true`."
+
+[Server-Side Helpers](https://trpc.io/docs/nextjs/server-side-helpers)
+
 ## Create T3 App Info
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
