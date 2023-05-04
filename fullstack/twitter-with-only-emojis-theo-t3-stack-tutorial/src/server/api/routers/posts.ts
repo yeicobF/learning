@@ -79,7 +79,8 @@ export const postsRouter = createTRPCRouter({
       // Con zod, validamos que el contenido del post sea un string con emojis.
       // En caso de que no exista, TRPC devolverá un error.
       z.object({
-        content: z.string().emoji().min(1).max(280),
+        // Definimos un mensaje que proviene desde el servidor.
+        content: z.string().emoji("Only emojis are allowed").min(1).max(280),
       })
     )
     .mutation(async ({ ctx, input }) => {
