@@ -1,6 +1,6 @@
 # Vue.js - Intermedio: Lleva tus bases al siguiente nivel
 
-- Comprado: 29/DIC/2022
+- Obtenido: 29/DIC/2022
 - Publicado: 2022
 - Última actualización: 2022
 
