@@ -8,18 +8,38 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import { LoadingPage } from "~/components/loading";
+import { useState } from "react";
 
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
 
+  const [input, setInput] = useState<string>("");
+
+  const ctx = api.useContext();
+
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput("");
+      // Invalidar la caché de los posts.
+      // - Con `void` indicamos que no nos importa si se trata de una promesa o
+      //   no, sino que queremos que suceda en el backend nada más.
+      void ctx.posts.getAll.invalidate();
+    },
+  });
+
   console.log({ user });
 
   if (!user) return null;
 
   return (
-    <div className="flex w-full gap-3">
+    <form
+      className="flex w-full gap-3"
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
       <Image
         src={user.profileImageUrl}
         alt="Profile image"
@@ -30,8 +50,15 @@ const CreatePostWizard = () => {
       <input
         placeholder="Type some emojis!"
         className="grow bg-transparent outline-none"
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        disabled={isPosting}
       />
-    </div>
+      <button onClick={() => mutate({ content: input })} type="submit">
+        Post
+      </button>
+    </form>
   );
 };
 
@@ -73,14 +100,14 @@ const Feed = () => {
   */
   const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
 
-  // Return empty div if BOTH aren't loaded, since user tends to load faster.
+  // Return empty div if BOTH aren'tz loaded, since user tends to load faster.
   if (postsLoading) return <LoadingPage />;
 
   if (!data) return <div>Something went wrong!</div>;
 
   return (
     <div className="flex flex-col">
-      {[...data, ...data]?.map((fullPost) => (
+      {data.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
       ))}
     </div>
