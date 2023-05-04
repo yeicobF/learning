@@ -9,4 +9,6 @@ globales.
 */
 body {
   @apply bg-black text-slate-100 font-semibold;
+
+  overscroll-behavior: none;
 }
