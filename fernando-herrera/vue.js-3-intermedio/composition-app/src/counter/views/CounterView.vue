@@ -1,26 +1,4 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-
-const counter = ref(0)
-
-const increase = () => {
-  counter.value++
-}
-
-// export default defineComponent({
-//   setup() {
-//     const counter = ref(0)
-// 
-//     const increase = () => {
-//       counter.value++
-//     }
-// 
-//     return {
-//       counter,
-//       increase
-//     }
-//   }
-// })
+<script lang="ts" src="./CounterView.ts">
 </script>
 
 <template>
