@@ -1,5 +1,6 @@
 # Curso de Astro 3 Desde Cero (Midudev)
 
+- **Progress**: 01:08:21 / 01:35:49
 - [Curso de Astro 3 Desde Cero 🚀 | midulive](https://youtu.be/RB5tR_nqUEw?si=JVqMkUe85n7FIHFX)
 
 ## Astro Starter Kit: Basics
