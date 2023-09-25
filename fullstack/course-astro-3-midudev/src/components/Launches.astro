@@ -1,0 +1,18 @@
+---
+// Podemos ejecutar cualquier JavaScript que queramos.
+// Podemos hacer un fetching de datos.
+
+const res = await fetch("https://api.spacexdata.com/v5/launches")
+const data = await res.json()
+
+console.log(data)
+
+// Podemos hacer un post para obtener toda la información.
+// const res = await fetch("https://api.spacexdata.com/v5/launches", {
+//   method: 'POST',
+// })
+---
+
+<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+  <article></article>
+</div>
