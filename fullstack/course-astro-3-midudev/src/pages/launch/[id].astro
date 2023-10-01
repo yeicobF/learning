@@ -2,11 +2,16 @@
 import Layout from "../../layouts/Layout.astro"
 import { getLatestLaunches, getLaunchById } from "../../services/spacex"
 
-// export const prerender = false
+export const prerender = false // server
+
+// Con las cookies podemos llamar a servicios, bases de datos, etc.
+// if (Astro.cookies.get("user")) {
+//   console.log("user logged")
+//   // Astro.redirect('/unauthorized')
+//   Astro.response.status = 401
+// }
 
 const { id } = Astro.params
-
-console.log({ id })
 
 let launch
 if (id) {
