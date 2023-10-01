@@ -1,0 +1,64 @@
+---
+import Layout from "../../layouts/Layout.astro"
+import { getLatestLaunches, getLaunchById } from "../../services/spacex"
+
+// export const prerender = false
+
+const { id } = Astro.params
+
+console.log({ id })
+
+let launch
+if (id) {
+  launch = await getLaunchById({ id })
+}
+
+// Esta es la forma estática de generar las rutas, pero también podemos utilizar
+// el modo del servidor (SSR).
+export async function getStaticPaths() {
+  // llamar a una API externa desde antes, para saber todas las
+  // ids que debes generar de antemano.
+  // Podemos llamar a una API, recuperar todas las IDs y
+  // generar estáticamente todas las páginas (rutas) que
+  // necesitamos generar en tiempo de compilación.
+  //
+  // En el Build Time le decimos qué rutas son las que deberá
+  // generar. Le indicamos qué IDs tiene que generar antes de que
+  // existan.
+  const launches = await getLatestLaunches()
+
+  // Esto es correcto para que antes de que un usuario entre a
+  // la página, conoces todos los productos o servicios que
+  // quieres servir. No son ilimitados, sino que conoces el número
+  // de elementos que quieres mostrar.
+  //
+  // En este caso tiene mucho sentido hacerlo, ya que generaremos un número
+  // finito de páginas.
+  // Esto nos permite optimizar el sistema.
+  /**
+   * No tendría mucho sentido que hagamos esto cuando hay por
+   * ejemplo, 5 millones de páginas; o cuando es un sistema muy
+   * dinámico, como Twitter. En ese caso, se generan muchos
+   * Tweets, por lo que requiere ser realmente dinámico.
+   */
+  return launches.map((launch) => ({
+    params: { id: launch.id },
+  }))
+}
+
+console.log(launch)
+---
+
+<Layout title={`Lanzamiento ${id}`}>
+  <article class="flex gap-y-4 flex-col">
+    <img
+      class="w-52 h-auto"
+      src={launch?.links?.patch.small}
+      alt={launch?.name}
+    />
+    <h2 class="text-4xl text-white font-bold">
+      Launch #{launch?.flight_number}
+    </h2>
+    <p class="text-lg">{launch?.details}</p>
+  </article>
+</Layout>
